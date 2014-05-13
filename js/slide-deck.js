@@ -15,7 +15,6 @@ function SlideDeck(el) {
   this.config_ = null;
   this.container = el || document.querySelector('slides');
   this.slides = [];
-  this.controller = null;
 
   this.getCurrentSlideFromHash_();
 
@@ -27,8 +26,7 @@ function SlideDeck(el) {
  * @const
  * @private
  */
-SlideDeck.prototype.SLIDE_CLASSES_ = [
-  'far-past', 'past', 'current', 'next', 'far-next'];
+SlideDeck.prototype.SLIDE_CLASSES_ = ['far-past', 'past', 'current', 'next', 'far-next'];
 
 /**
  * @const
@@ -99,16 +97,6 @@ SlideDeck.prototype.onDomLoaded_ = function(e) {
       }
     }, false);
   }
-
-  // Note: this needs to come after addEventListeners_(), which adds a
-  // 'keydown' listener that this controller relies on.
-  // Also, no need to set this up if we're on mobile.
-  if (!Modernizr.touch) {
-    this.controller = new SlideController(this);
-    if (this.controller.isPopup) {
-      document.body.classList.add('popup');
-    }
-  }
 };
 
 /**
@@ -168,11 +156,6 @@ SlideDeck.prototype.onBodyKeyDown_ = function(e) {
     return;
   }
 
-  // Forward keydowns to the main slides if we're the popup.
-  if (this.controller && this.controller.isPopup) {
-    this.controller.sendMsg({keyCode: e.keyCode});
-  }
-
   switch (e.keyCode) {
     case 13: // Enter
       if (document.body.classList.contains('overview')) {
@@ -210,14 +193,6 @@ SlideDeck.prototype.onBodyKeyDown_ = function(e) {
 
     case 79: // O: Toggle overview
       this.toggleOverview();
-      break;
-
-    case 80: // P
-      if (this.controller && this.controller.isPopup) {
-        document.body.classList.toggle('with-notes');
-      } else if (this.controller && !this.controller.popup) {
-        document.body.classList.toggle('with-notes');
-      }
       break;
 
     case 82: // R
@@ -452,14 +427,6 @@ SlideDeck.prototype.prevSlide = function(opt_dontPush) {
     var bodyClassList = document.body.classList;
     bodyClassList.remove('highlight-code');
 
-    // Toggle off speaker notes if they're showing when we move backwards on the
-    // main slides. If we're the speaker notes popup, leave them up.
-    if (this.controller && !this.controller.isPopup) {
-      bodyClassList.remove('with-notes');
-    } else if (!this.controller) {
-      bodyClassList.remove('with-notes');
-    }
-
     this.prevSlide_ = this.curSlide_--;
 
     this.updateSlides_(opt_dontPush);
@@ -477,14 +444,6 @@ SlideDeck.prototype.nextSlide = function(opt_dontPush) {
   if (this.curSlide_ < this.slides.length - 1) {
     var bodyClassList = document.body.classList;
     bodyClassList.remove('highlight-code');
-
-    // Toggle off speaker notes if they're showing when we advanced on the main
-    // slides. If we're the speaker notes popup, leave them up.
-    if (this.controller && !this.controller.isPopup) {
-      bodyClassList.remove('with-notes');
-    } else if (!this.controller) {
-      bodyClassList.remove('with-notes');
-    }
 
     this.prevSlide_ = this.curSlide_++;
 

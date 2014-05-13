@@ -1371,6 +1371,12 @@ article.smaller q:before, article.smaller q:after {
     opacity: 1;
 }
 
+#addthis{
+    left:30px;
+    top:150px;
+    display:none;
+}
+
 @media print {
   
   slides slide {
