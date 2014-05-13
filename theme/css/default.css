@@ -1355,10 +1355,15 @@ article.smaller q:before, article.smaller q:after {
   display: none;
 }
 
-.clogo {
-    opacity:.6;
+#splogos a {
+    border-bottom: none;
 }
-.clogo:hover {
+
+#splogos img {
+    opacity:.2;
+    border:0;
+}
+#splogos img:hover {
     opacity:1;
 }
 

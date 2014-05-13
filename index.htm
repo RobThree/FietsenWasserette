@@ -217,9 +217,11 @@
   </slide>
 
   <slide class="backdrop"></slide>
-
-  <a id="jsilogo" href="http://jouwslimsteidee.nl" class="clogo" style="display:block;position:absolute;bottom:50px;right:50px;border:0;display:none"><img src="images/jouwslimsteidee_logo.png" width="184" height="102"></a>
-  <a id="githublogo" href="https://github.com/RobThree/FietsenWasserette" class="clogo" style="display:block;position:absolute;bottom:50px;left:50px;border:0;display:none"><img src="images/octocat.png" width="102" height="102"></a>
+  <div id="splogos" style="text-align:center;position:absolute;bottom:10px;width:100%;display:none">
+    <a href="https://github.com/RobThree/FietsenWasserette"><img src="images/octocat.png" width="102" height="102" style="position:absolute;left:50px;"></a>
+    <a href="http://www.gemert-bakel.nl/"><img src="images/logo-gemeente-gemert-bakel.png" width="422" height="102"></a>
+    <a href="http://jouwslimsteidee.nl"><img src="images/jouwslimsteidee_logo.png" width="184" height="102" style="position:absolute;right:50px;"></a>
+  </div>
 </slides>
 
 <!--[if IE]>
@@ -235,16 +237,12 @@
                 break;
             case 2:
                 $('#prev-slide-area').fadeIn();
-                if ($('#githublogo').is(':visible'))
-                    $('#githublogo').slideUp(1000);
-                if ($('#jsilogo').is(':visible'))
-                    $('#jsilogo').slideUp(1000);
+                if ($('#splogos').is(':visible'))
+                    $('#splogos').slideUp(500);
                 break;
             case 3:
-                if (!$('#githublogo').is(':visible'))
-                    $('#githublogo').slideDown(1000);
-                if (!$('#jsilogo').is(':visible'))
-                    $('#jsilogo').slideDown(1000);
+                if (!$('#splogos').is(':visible'))
+                    $('#splogos').slideDown(500);
                 break;
             case 6:
                 $('#coin').clearQueue().finish().css({ width: '150px', height: '148px', top: '305px', left: '750px', position: 'absolute'}).show();
