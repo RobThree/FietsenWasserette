@@ -1270,7 +1270,6 @@ article.smaller q:before, article.smaller q:after {
   line-height: 1.3;
 }
 
-
 /* line 924, ../scss/default.scss */
 .title-slide hgroup {
   bottom: 100px;
@@ -1365,6 +1364,22 @@ article.smaller q:before, article.smaller q:after {
 }
 #splogos img:hover {
     opacity:1;
+}
+
+a.imgsource {
+    font-size: 12pt;
+    position: absolute;
+    color: #fff;
+    border: none;
+    bottom: 5px;
+    right: 5px;
+    text-shadow: 0 1px 2px rgba(0,0,0,.8);
+    opacity: .4;
+}
+
+a.imgsource:hover {
+    color: #fff !important;
+    opacity: 1;
 }
 
 @media print {
