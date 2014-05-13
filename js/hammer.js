@@ -1,9 +1,586 @@
-/*! Hammer.JS - v1.1.3dev - 2014-05-07
- * http://eightmedia.github.io/hammer.js
- *
- * Copyright (c) 2014 Jorik Tangelder <j.tangelder@gmail.com>;
- * Licensed under the MIT license */
+/*
+ * Hammer.JS
+ * version 0.4
+ * author: Eight Media
+ * https://github.com/EightMedia/hammer.js
+ */
+function Hammer(element, options, undefined)
+{
+    var self = this;
+
+    var defaults = {
+        // prevent the default event or not... might be buggy when false
+        prevent_default    : false,
+        css_hacks          : true,
+
+        drag               : true,
+        drag_vertical      : true,
+        drag_horizontal    : true,
+        // minimum distance before the drag event starts
+        drag_min_distance  : 20, // pixels
+
+        // pinch zoom and rotation
+        transform          : true,
+        scale_treshold     : 0.1,
+        rotation_treshold  : 15, // degrees
+
+        tap                : true,
+        tap_double         : true,
+        tap_max_interval   : 300,
+        tap_double_distance: 20,
+
+        hold               : true,
+        hold_timeout       : 500
+    };
+    options = mergeObject(defaults, options);
+
+    // some css hacks
+    (function() {
+        if(!options.css_hacks) {
+            return false;
+        }
+
+        var vendors = ['webkit','moz','ms','o',''];
+        var css_props = {
+            "userSelect": "none",
+            "touchCallout": "none",
+            "userDrag": "none",
+            "tapHighlightColor": "rgba(0,0,0,0)"
+        };
+
+        var prop = '';
+        for(var i = 0; i < vendors.length; i++) {
+            for(var p in css_props) {
+                prop = p;
+                if(vendors[i]) {
+                    prop = vendors[i] + prop.substring(0, 1).toUpperCase() + prop.substring(1);
+                }
+                element.style[ prop ] = css_props[p];
+            }
+        }
+    })();
+
+    // holds the distance that has been moved
+    var _distance = 0;
+
+    // holds the exact angle that has been moved
+    var _angle = 0;
+
+    // holds the diraction that has been moved
+    var _direction = 0;
+
+    // holds position movement for sliding
+    var _pos = { };
+
+    // how many fingers are on the screen
+    var _fingers = 0;
+
+    var _first = false;
+
+    var _gesture = null;
+    var _prev_gesture = null;
+
+    var _touch_start_time = null;
+    var _prev_tap_pos = {x: 0, y: 0};
+    var _prev_tap_end_time = null;
+
+    var _hold_timer = null;
+
+    var _offset = {};
+
+    // keep track of the mouse status
+    var _mousedown = false;
+
+    var _event_start;
+    var _event_move;
+    var _event_end;
 
 
-!function(a,b){"use strict";function c(){d.READY||(s.determineEventTypes(),r.each(d.gestures,function(a){u.register(a)}),s.onTouch(d.DOCUMENT,n,u.detect),s.onTouch(d.DOCUMENT,o,u.detect),d.READY=!0)}var d=function v(a,b){return new v.Instance(a,b||{})};d.VERSION="1.1.3dev",d.defaults={behavior:{userSelect:"none",touchAction:"none",touchCallout:"none",contentZooming:"none",userDrag:"none",tapHighlightColor:"rgba(0,0,0,0)"}},d.DOCUMENT=document,d.HAS_POINTEREVENTS=navigator.pointerEnabled||navigator.msPointerEnabled,d.HAS_TOUCHEVENTS="ontouchstart"in a,d.IS_MOBILE=/mobile|tablet|ip(ad|hone|od)|android|silk/i.test(navigator.userAgent),d.NO_MOUSEEVENTS=d.HAS_TOUCHEVENTS&&d.IS_MOBILE||d.HAS_POINTEREVENTS,d.CALCULATE_INTERVAL=25;var e={},f=d.DIRECTION_DOWN="down",g=d.DIRECTION_LEFT="left",h=d.DIRECTION_UP="up",i=d.DIRECTION_RIGHT="right",j=d.POINTER_MOUSE="mouse",k=d.POINTER_TOUCH="touch",l=d.POINTER_PEN="pen",m=d.EVENT_START="start",n=d.EVENT_MOVE="move",o=d.EVENT_END="end",p=d.EVENT_RELEASE="release",q=d.EVENT_TOUCH="touch";d.READY=!1,d.plugins=d.plugins||{},d.gestures=d.gestures||{};var r=d.utils={extend:function(a,c,d){for(var e in c)!c.hasOwnProperty(e)||a[e]!==b&&d||(a[e]=c[e]);return a},on:function(a,b,c){a.addEventListener(b,c,!1)},off:function(a,b,c){a.removeEventListener(b,c,!1)},each:function(a,c,d){var e,f;if("forEach"in a)a.forEach(c,d);else if(a.length!==b){for(e=0,f=a.length;f>e;e++)if(c.call(d,a[e],e,a)===!1)return}else for(e in a)if(a.hasOwnProperty(e)&&c.call(d,a[e],e,a)===!1)return},inStr:function(a,b){return a.indexOf(b)>-1},inArray:function(a,b){if(a.indexOf){var c=a.indexOf(b);return-1===c?!1:c}for(var d=0,e=a.length;e>d;d++)if(a[d]===b)return d;return!1},toArray:function(a){return Array.prototype.slice.call(a,0)},hasParent:function(a,b){for(;a;){if(a==b)return!0;a=a.parentNode}return!1},getCenter:function(a){var b=[],c=[],d=[],e=[],f=Math.min,g=Math.max;return 1===a.length?{pageX:a[0].pageX,pageY:a[0].pageY,clientX:a[0].clientX,clientY:a[0].clientY}:(r.each(a,function(a){b.push(a.pageX),c.push(a.pageY),d.push(a.clientX),e.push(a.clientY)}),{pageX:(f.apply(Math,b)+g.apply(Math,b))/2,pageY:(f.apply(Math,c)+g.apply(Math,c))/2,clientX:(f.apply(Math,d)+g.apply(Math,d))/2,clientY:(f.apply(Math,e)+g.apply(Math,e))/2})},getVelocity:function(a,b,c){return{x:Math.abs(b/a)||0,y:Math.abs(c/a)||0}},getAngle:function(a,b){var c=b.clientX-a.clientX,d=b.clientY-a.clientY;return 180*Math.atan2(d,c)/Math.PI},getDirection:function(a,b){var c=Math.abs(a.clientX-b.clientX),d=Math.abs(a.clientY-b.clientY);return c>=d?a.clientX-b.clientX>0?g:i:a.clientY-b.clientY>0?h:f},getDistance:function(a,b){var c=b.clientX-a.clientX,d=b.clientY-a.clientY;return Math.sqrt(c*c+d*d)},getScale:function(a,b){return a.length>=2&&b.length>=2?this.getDistance(b[0],b[1])/this.getDistance(a[0],a[1]):1},getRotation:function(a,b){return a.length>=2&&b.length>=2?this.getAngle(b[1],b[0])-this.getAngle(a[1],a[0]):0},isVertical:function(a){return a==h||a==f},setPrefixedCss:function(a,b,c,d){var e=["","Webkit","Moz","O","ms"];b=r.toCamelCase(b);for(var f=0;f<e.length;f++){var g=b;if(e[f]&&(g=e[f]+g.slice(0,1).toUpperCase()+g.slice(1)),g in a.style){a.style[g]=(null==d||d)&&c||"";break}}},toggleBehavior:function(a,b,c){if(b&&a&&a.style){r.each(b,function(b,d){r.setPrefixedCss(a,d,b,c)});var d=c&&function(){return!1};"none"==b.userSelect&&(a.onselectstart=d),"none"==b.userDrag&&(a.ondragstart=d)}},toCamelCase:function(a){return a.replace(/[_-]([a-z])/g,function(a){return a[1].toUpperCase()})}},s=d.event={preventMouseEvents:!1,started:!1,shouldDetect:!1,on:function(a,b,c,d){var e=b.split(" ");r.each(e,function(b){r.on(a,b,c),d&&d(b)})},off:function(a,b,c,d){var e=b.split(" ");r.each(e,function(b){r.off(a,b,c),d&&d(b)})},onTouch:function(a,b,c){var f=this,g=function(e){var g,h=e.type.toLowerCase(),i=d.HAS_POINTEREVENTS,j=r.inStr(h,"mouse");j&&f.preventMouseEvents||(j&&b==m&&0===e.button?(f.preventMouseEvents=!1,f.shouldDetect=!0):i&&b==m?f.shouldDetect=1===e.buttons||t.matchType(k,e):j||b!=m||(f.preventMouseEvents=!0,f.shouldDetect=!0),i&&b!=o&&t.updatePointer(b,e),f.shouldDetect&&(g=f.doDetect.call(f,e,b,a,c)),g==o&&(f.preventMouseEvents=!1,f.shouldDetect=!1,t.reset()),i&&b==o&&t.updatePointer(b,e))};return this.on(a,e[b],g),g},doDetect:function(a,b,c,d){var e=this.getTouchList(a,b),f=e.length,g=b,h=e.trigger,i=f;b==m?h=q:b==o&&(h=p,i=e.length-(a.changedTouches?a.changedTouches.length:1)),i>0&&this.started&&(g=n),this.started=!0;var j=this.collectEventData(c,g,e,a);return b!=o&&d.call(u,j),h&&(j.changedLength=i,j.eventType=h,d.call(u,j),j.eventType=g,delete j.changedLength),g==o&&(d.call(u,j),this.started=!1),g},determineEventTypes:function(){var b;return b=d.HAS_POINTEREVENTS?a.PointerEvent?["pointerdown","pointermove","pointerup pointercancel lostpointercapture"]:["MSPointerDown","MSPointerMove","MSPointerUp MSPointerCancel MSLostPointerCapture"]:d.NO_MOUSEEVENTS?["touchstart","touchmove","touchend touchcancel"]:["touchstart mousedown","touchmove mousemove","touchend touchcancel mouseup"],e[m]=b[0],e[n]=b[1],e[o]=b[2],e},getTouchList:function(a,b){if(d.HAS_POINTEREVENTS)return t.getTouchList();if(a.touches){if(b==n)return a.touches;var c=[],e=[].concat(r.toArray(a.touches),r.toArray(a.changedTouches)),f=[];return r.each(e,function(a){r.inArray(c,a.identifier)===!1&&f.push(a),c.push(a.identifier)}),f}return a.identifier=1,[a]},collectEventData:function(a,b,c,d){var e=k;return r.inStr(d.type,"mouse")||t.matchType(j,d)?e=j:t.matchType(l,d)&&(e=l),{center:r.getCenter(c),timeStamp:Date.now(),target:d.target,touches:c,eventType:b,pointerType:e,srcEvent:d,preventDefault:function(){var a=this.srcEvent;a.preventManipulation&&a.preventManipulation(),a.preventDefault&&a.preventDefault()},stopPropagation:function(){this.srcEvent.stopPropagation()},stopDetect:function(){return u.stopDetect()}}}},t=d.PointerEvent={pointers:{},getTouchList:function(){var a=[];return r.each(this.pointers,function(b){a.push(b)}),a},updatePointer:function(a,b){a==o||a!=o&&1!==b.buttons?delete this.pointers[b.pointerId]:(b.identifier=b.pointerId,this.pointers[b.pointerId]=b)},matchType:function(a,b){if(!b.pointerType)return!1;var c=b.pointerType,d={};return d[j]=c===(b.MSPOINTER_TYPE_MOUSE||j),d[k]=c===(b.MSPOINTER_TYPE_TOUCH||k),d[l]=c===(b.MSPOINTER_TYPE_PEN||l),d[a]},reset:function(){this.pointers={}}},u=d.detection={gestures:[],current:null,previous:null,stopped:!1,startDetect:function(a,b){this.current||(this.stopped=!1,this.current={inst:a,startEvent:r.extend({},b),lastEvent:!1,lastCalcEvent:!1,futureCalcEvent:!1,lastCalcData:{},name:""},this.detect(b))},detect:function(a){if(this.current&&!this.stopped){a=this.extendEventData(a);var b=this.current.inst,c=b.options;return r.each(this.gestures,function(d){!this.stopped&&b.enabled&&c[d.name]&&d.handler.call(d,a,b)},this),this.current&&(this.current.lastEvent=a),a.eventType==o&&this.stopDetect(),a}},stopDetect:function(){this.previous=r.extend({},this.current),this.current=null,this.stopped=!0},getCalculatedData:function(a,b,c,e,f){var g=this.current,h=!1,i=g.lastCalcEvent,j=g.lastCalcData;i&&a.timeStamp-i.timeStamp>d.CALCULATE_INTERVAL&&(b=i.center,c=a.timeStamp-i.timeStamp,e=a.center.clientX-i.center.clientX,f=a.center.clientY-i.center.clientY,h=!0),(a.eventType==q||a.eventType==p)&&(g.futureCalcEvent=a),(!g.lastCalcEvent||h)&&(j.velocity=r.getVelocity(c,e,f),j.angle=r.getAngle(b,a.center),j.direction=r.getDirection(b,a.center),g.lastCalcEvent=g.futureCalcEvent||a,g.futureCalcEvent=a),a.velocityX=j.velocity.x,a.velocityY=j.velocity.y,a.interimAngle=j.angle,a.interimDirection=j.direction},extendEventData:function(a){var b=this.current,c=b.startEvent,d=b.lastEvent||c;(a.eventType==q||a.eventType==p)&&(c.touches=[],r.each(a.touches,function(a){c.touches.push({clientX:a.clientX,clientY:a.clientY})}));var e=a.timeStamp-c.timeStamp,f=a.center.clientX-c.center.clientX,g=a.center.clientY-c.center.clientY;return this.getCalculatedData(a,d.center,e,f,g),r.extend(a,{startEvent:c,deltaTime:e,deltaX:f,deltaY:g,distance:r.getDistance(c.center,a.center),angle:r.getAngle(c.center,a.center),direction:r.getDirection(c.center,a.center),scale:r.getScale(c.touches,a.touches),rotation:r.getRotation(c.touches,a.touches)}),a},register:function(a){var c=a.defaults||{};return c[a.name]===b&&(c[a.name]=!0),r.extend(d.defaults,c,!0),a.index=a.index||1e3,this.gestures.push(a),this.gestures.sort(function(a,b){return a.index<b.index?-1:a.index>b.index?1:0}),this.gestures}};d.Instance=function(a,b){var e=this;c(),this.element=a,this.enabled=!0,r.each(b,function(a,c){delete b[c],b[r.toCamelCase(c)]=a}),this.options=r.extend(r.extend({},d.defaults),b||{}),this.options.behavior&&r.toggleBehavior(this.element,this.options.behavior,!0),this.eventStartHandler=s.onTouch(a,m,function(a){e.enabled&&a.eventType==m?u.startDetect(e,a):a.eventType==q&&u.detect(a)}),this.eventHandlers=[]},d.Instance.prototype={on:function(a,b){var c=this;return s.on(c.element,a,b,function(a){c.eventHandlers.push({gesture:a,handler:b})}),c},off:function(a,b){var c=this;return s.off(c.element,a,b,function(a){var d=r.inArray({gesture:a,handler:b});d!==!1&&c.eventHandlers.splice(d,1)}),c},trigger:function(a,b){b||(b={});var c=d.DOCUMENT.createEvent("Event");c.initEvent(a,!0,!0),c.gesture=b;var e=this.element;return r.hasParent(b.target,e)&&(e=b.target),e.dispatchEvent(c),this},enable:function(a){return this.enabled=a,this},dispose:function(){var a,b;for(r.toggleBehavior(this.element,this.options.behavior,!1),a=-1;b=this.eventHandlers[++a];)r.off(this.element,b.gesture,b.handler);return this.eventHandlers=[],s.off(this.element,e[m],this.eventStartHandler),null}},function(a){function b(b,d){var e=u.current;if(!(d.options.dragMaxTouches>0&&b.touches.length>d.options.dragMaxTouches))switch(b.eventType){case m:c=!1;break;case n:if(b.distance<d.options.dragMinDistance&&e.name!=a)return;var j=e.startEvent.center;if(e.name!=a&&(e.name=a,d.options.dragDistanceCorrection&&b.distance>0)){var k=Math.abs(d.options.dragMinDistance/b.distance);j.pageX+=b.deltaX*k,j.pageY+=b.deltaY*k,j.clientX+=b.deltaX*k,j.clientY+=b.deltaY*k,b=u.extendEventData(b)}(e.lastEvent.dragLockToAxis||d.options.dragLockToAxis&&d.options.dragLockMinDistance<=b.distance)&&(b.dragLockToAxis=!0);var l=e.lastEvent.direction;b.dragLockToAxis&&l!==b.direction&&(b.direction=r.isVertical(l)?b.deltaY<0?h:f:b.deltaX<0?g:i),c||(d.trigger(a+"start",b),c=!0),d.trigger(a,b),d.trigger(a+b.direction,b);var q=r.isVertical(b.direction);(d.options.dragBlockVertical&&q||d.options.dragBlockHorizontal&&!q)&&b.preventDefault();break;case p:c&&b.changedLength<=d.options.dragMaxTouches&&(d.trigger(a+"end",b),c=!1);break;case o:c=!1}}var c=!1;d.gestures.Drag={name:a,index:50,handler:b,defaults:{dragMinDistance:10,dragDistanceCorrection:!0,dragMaxTouches:1,dragBlockHorizontal:!1,dragBlockVertical:!1,dragLockToAxis:!1,dragLockMinDistance:25}}}("drag"),d.gestures.Gesture={name:"gesture",index:1337,handler:function(a,b){b.trigger(this.name,a)}},function(a){function b(b,d){var e=d.options,f=u.current;switch(b.eventType){case m:clearTimeout(c),f.name=a,c=setTimeout(function(){f&&f.name==a&&d.trigger(a,b)},e.holdTimeout);break;case n:b.distance>e.holdThreshold&&clearTimeout(c);break;case p:clearTimeout(c)}}var c;d.gestures.Hold={name:a,index:10,defaults:{holdTimeout:500,holdThreshold:2},handler:b}}("hold"),d.gestures.Release={name:"release",index:1/0,handler:function(a,b){a.eventType==p&&b.trigger(this.name,a)}},d.gestures.Swipe={name:"swipe",index:40,defaults:{swipeMinTouches:1,swipeMaxTouches:1,swipeVelocityX:.6,swipeVelocityY:.6},handler:function(a,b){if(a.eventType==p){var c=a.touches.length,d=b.options;if(c<d.swipeMinTouches||c>d.swipeMaxTouches)return;(a.velocityX>d.swipeVelocityX||a.velocityY>d.swipeVelocityY)&&(b.trigger(this.name,a),b.trigger(this.name+a.direction,a))}}},function(a){function b(b,d){var e,f,g=d.options,h=u.current,i=u.previous;switch(b.eventType){case m:c=!1;break;case n:c=c||b.distance>g.tapMaxDistance;break;case o:!r.inStr(b.srcEvent.type,"cancel")&&b.deltaTime<g.tapMaxTime&&!c&&(e=i&&i.lastEvent&&b.timeStamp-i.lastEvent.timeStamp,f=!1,i&&i.name==a&&e&&e<g.doubleTapInterval&&b.distance<g.doubleTapDistance&&(d.trigger("doubletap",b),f=!0),(!f||g.tapAlways)&&(h.name=a,d.trigger(h.name,b)))}}var c=!1;d.gestures.Tap={name:a,index:100,handler:b,defaults:{tapMaxTime:250,tapMaxDistance:10,tapAlways:!0,doubleTapDistance:20,doubleTapInterval:300}}}("tap"),d.gestures.Touch={name:"touch",index:-1/0,defaults:{preventDefault:!1,preventMouse:!1},handler:function(a,b){return b.options.preventMouse&&a.pointerType==j?void a.stopDetect():(b.options.preventDefault&&a.preventDefault(),void(a.eventType==q&&b.trigger("touch",a)))}},function(a){function b(b,d){switch(b.eventType){case m:c=!1;break;case n:if(b.touches.length<2)return;var e=Math.abs(1-b.scale),f=Math.abs(b.rotation);if(e<d.options.transformMinScale&&f<d.options.transformMinRotation)return;u.current.name=a,c||(d.trigger(a+"start",b),c=!0),d.trigger(a,b),f>d.options.transformMinRotation&&d.trigger("rotate",b),e>d.options.transformMinScale&&(d.trigger("pinch",b),d.trigger("pinch"+(b.scale<1?"in":"out"),b));break;case p:c&&b.changedLength<2&&(d.trigger(a+"end",b),c=!1)}}var c=!1;d.gestures.Transform={name:a,index:45,defaults:{transformMinScale:.01,transformMinRotation:1},handler:b}}("transform"),"function"==typeof define&&define.amd?define(function(){return d}):"undefined"!=typeof module&&module.exports?module.exports=d:a.Hammer=d}(window);
-//# sourceMappingURL=hammer.min.map
+    /**
+     * angle to direction define
+     * @param  float    angle
+     * @return string   direction
+     */
+    this.getDirectionFromAngle = function( angle )
+    {
+        var directions = {
+            down: angle >= 45 && angle < 135, //90
+            left: angle >= 135 || angle <= -135, //180
+            up: angle < -45 && angle > -135, //270
+            right: angle >= -45 && angle <= 45 //0
+        };
+
+        var direction, key;
+        for(key in directions){
+            if(directions[key]){
+                direction = key;
+                break;
+            }
+        }
+        return direction;
+    };
+
+
+    /**
+     * count the number of fingers in the event
+     * when no fingers are detected, one finger is returned (mouse pointer)
+     * @param  event
+     * @return int  fingers
+     */
+    function countFingers( event )
+    {
+        // there is a bug on android (until v4?) that touches is always 1,
+        // so no multitouch is supported, e.g. no, zoom and rotation...
+        return event.touches ? event.touches.length : 1;
+    }
+
+
+    /**
+     * get the x and y positions from the event object
+     * @param  event
+     * @return array  [{ x: int, y: int }]
+     */
+    function getXYfromEvent( event )
+    {
+        event = event || window.event;
+
+        // no touches, use the event pageX and pageY
+        if(!event.touches) {
+            var doc = document,
+                body = doc.body;
+
+            return [{
+                x: event.pageX || event.clientX + ( doc && doc.scrollLeft || body && body.scrollLeft || 0 ) - ( doc && doc.clientLeft || body && doc.clientLeft || 0 ),
+                y: event.pageY || event.clientY + ( doc && doc.scrollTop || body && body.scrollTop || 0 ) - ( doc && doc.clientTop || body && doc.clientTop || 0 )
+            }];
+        }
+        // multitouch, return array with positions
+        else {
+            var pos = [], src;
+            for(var t=0, len=event.touches.length; t<len; t++) {
+                src = event.touches[t];
+                pos.push({ x: src.pageX, y: src.pageY });
+            }
+            return pos;
+        }
+    }
+
+
+    /**
+     * calculate the angle between two points
+     * @param object pos1 { x: int, y: int }
+     * @param object pos2 { x: int, y: int }
+     */
+    function getAngle( pos1, pos2 )
+    {
+        return Math.atan2(pos2.y - pos1.y, pos2.x - pos1.x) * 180 / Math.PI;
+    }
+
+    /**
+     * trigger an event/callback by name with params
+     * @param string name
+     * @param array  params
+     */
+    function triggerEvent( eventName, params )
+    {
+        // return touches object
+        params.touches = getXYfromEvent(params.originalEvent);
+        params.type = eventName;
+
+        // trigger callback
+        if(isFunction(self["on"+ eventName])) {
+            self["on"+ eventName].call(self, params);
+        }
+    }
+
+
+    /**
+     * cancel event
+     * @param   object  event
+     * @return  void
+     */
+
+    function cancelEvent(event){
+        event = event || window.event;
+        if(event.preventDefault){
+            event.preventDefault();
+        }else{
+            event.returnValue = false;
+            event.cancelBubble = true;
+        }
+    }
+
+
+    /**
+     * reset the internal vars to the start values
+     */
+    function reset()
+    {
+        _pos = {};
+        _first = false;
+        _fingers = 0;
+        _distance = 0;
+        _angle = 0;
+        _gesture = null;
+    }
+
+
+    var gestures = {
+        // hold gesture
+        // fired on touchstart
+        hold : function(event)
+        {
+            // only when one finger is on the screen
+            if(options.hold) {
+                _gesture = 'hold';
+                clearTimeout(_hold_timer);
+
+                _hold_timer = setTimeout(function() {
+                    if(_gesture == 'hold') {
+                        triggerEvent("hold", {
+                            originalEvent   : event,
+                            position        : _pos.start
+                        });
+                    }
+                }, options.hold_timeout);
+            }
+        },
+
+
+        // drag gesture
+        // fired on mousemove
+        drag : function(event)
+        {
+            // get the distance we moved
+            var _distance_x = _pos.move[0].x - _pos.start[0].x;
+            var _distance_y = _pos.move[0].y - _pos.start[0].y;
+            _distance = Math.sqrt(_distance_x * _distance_x + _distance_y * _distance_y);
+
+            // drag
+            // minimal movement required
+            if(options.drag && (_distance > options.drag_min_distance) || _gesture == 'drag') {
+                // calculate the angle
+                _angle = getAngle(_pos.start[0], _pos.move[0]);
+                _direction = self.getDirectionFromAngle(_angle);
+
+                // check the movement and stop if we go in the wrong direction
+                var is_vertical = (_direction == 'up' || _direction == 'down');
+                if(((is_vertical && !options.drag_vertical) || (!is_vertical && !options.drag_horizontal))
+                    && (_distance > options.drag_min_distance)) {
+                    return;
+                }
+
+                _gesture = 'drag';
+
+                var position = { x: _pos.move[0].x - _offset.left,
+                    y: _pos.move[0].y - _offset.top };
+
+                var event_obj = {
+                    originalEvent   : event,
+                    position        : position,
+                    direction       : _direction,
+                    distance        : _distance,
+                    distanceX       : _distance_x,
+                    distanceY       : _distance_y,
+                    angle           : _angle
+                };
+
+                // on the first time trigger the start event
+                if(_first) {
+                    triggerEvent("dragstart", event_obj);
+
+                    _first = false;
+                }
+
+                // normal slide event
+                triggerEvent("drag", event_obj);
+
+                cancelEvent(event);
+            }
+        },
+
+
+        // transform gesture
+        // fired on touchmove
+        transform : function(event)
+        {
+            if(options.transform) {
+                var scale = event.scale || 1;
+                var rotation = event.rotation || 0;
+
+                if(countFingers(event) != 2) {
+                    return false;
+                }
+
+                if(_gesture != 'drag' &&
+                    (_gesture == 'transform' || Math.abs(1-scale) > options.scale_treshold
+                        || Math.abs(rotation) > options.rotation_treshold)) {
+                    _gesture = 'transform';
+
+                    _pos.center = {  x: ((_pos.move[0].x + _pos.move[1].x) / 2) - _offset.left,
+                        y: ((_pos.move[0].y + _pos.move[1].y) / 2) - _offset.top };
+
+                    var event_obj = {
+                        originalEvent   : event,
+                        position        : _pos.center,
+                        scale           : scale,
+                        rotation        : rotation
+                    };
+
+                    // on the first time trigger the start event
+                    if(_first) {
+                        triggerEvent("transformstart", event_obj);
+                        _first = false;
+                    }
+
+                    triggerEvent("transform", event_obj);
+
+                    cancelEvent(event);
+
+                    return true;
+                }
+            }
+
+            return false;
+        },
+
+
+        // tap and double tap gesture
+        // fired on touchend
+        tap : function(event)
+        {
+            // compare the kind of gesture by time
+            var now = new Date().getTime();
+            var touch_time = now - _touch_start_time;
+
+            // dont fire when hold is fired
+            if(options.hold && !(options.hold && options.hold_timeout > touch_time)) {
+                return;
+            }
+
+            // when previous event was tap and the tap was max_interval ms ago
+            var is_double_tap = (function(){
+                if (_prev_tap_pos && options.tap_double && _prev_gesture == 'tap' && (_touch_start_time - _prev_tap_end_time) < options.tap_max_interval) {
+                    var x_distance = Math.abs(_prev_tap_pos[0].x - _pos.start[0].x);
+                    var y_distance = Math.abs(_prev_tap_pos[0].y - _pos.start[0].y);
+                    return (_prev_tap_pos && _pos.start && Math.max(x_distance, y_distance) < options.tap_double_distance);
+
+                }
+                return false;
+            })();
+
+            if(is_double_tap) {
+                _gesture = 'double_tap';
+                _prev_tap_end_time = null;
+
+                triggerEvent("doubletap", {
+                    originalEvent   : event,
+                    position        : _pos.start
+                });
+                cancelEvent(event);
+            }
+
+            // single tap is single touch
+            else {
+                _gesture = 'tap';
+                _prev_tap_end_time = now;
+                _prev_tap_pos = _pos.start;
+
+                if(options.tap) {
+                    triggerEvent("tap", {
+                        originalEvent   : event,
+                        position        : _pos.start
+                    });
+                    cancelEvent(event);
+                }
+            }
+
+        }
+
+    };
+
+
+    function handleEvents(event)
+    {
+        switch(event.type)
+        {
+            case 'mousedown':
+            case 'touchstart':
+                _pos.start = getXYfromEvent(event);
+                _touch_start_time = new Date().getTime();
+                _fingers = countFingers(event);
+                _first = true;
+                _event_start = event;
+
+                // borrowed from jquery offset https://github.com/jquery/jquery/blob/master/src/offset.js
+                var box = element.getBoundingClientRect();
+                var clientTop  = element.clientTop  || document.body.clientTop  || 0;
+                var clientLeft = element.clientLeft || document.body.clientLeft || 0;
+                var scrollTop  = window.pageYOffset || element.scrollTop  || document.body.scrollTop;
+                var scrollLeft = window.pageXOffset || element.scrollLeft || document.body.scrollLeft;
+
+                _offset = {
+                    top: box.top + scrollTop - clientTop,
+                    left: box.left + scrollLeft - clientLeft
+                };
+
+                _mousedown = true;
+
+                // hold gesture
+                gestures.hold(event);
+
+                if(options.prevent_default) {
+                    cancelEvent(event);
+                }
+                break;
+
+            case 'mousemove':
+            case 'touchmove':
+                if(!_mousedown) {
+                    return false;
+                }
+                _event_move = event;
+                _pos.move = getXYfromEvent(event);
+
+                if(!gestures.transform(event)) {
+                    gestures.drag(event);
+                }
+                break;
+
+            case 'mouseup':
+            case 'mouseout':
+            case 'touchcancel':
+            case 'touchend':
+                if(!_mousedown || (_gesture != 'transform' && event.touches && event.touches.length > 0)) {
+                    return false;
+                }
+
+                _mousedown = false;
+                _event_end = event;
+
+                // drag gesture
+                // dragstart is triggered, so dragend is possible
+                if(_gesture == 'drag') {
+                    triggerEvent("dragend", {
+                        originalEvent   : event,
+                        direction       : _direction,
+                        distance        : _distance,
+                        angle           : _angle
+                    });
+                }
+
+                // transform
+                // transformstart is triggered, so transformed is possible
+                else if(_gesture == 'transform') {
+                    triggerEvent("transformend", {
+                        originalEvent   : event,
+                        position        : _pos.center,
+                        scale           : event.scale,
+                        rotation        : event.rotation
+                    });
+                }
+                else {
+                    gestures.tap(_event_start);
+                }
+
+                _prev_gesture = _gesture;
+
+                // reset vars
+                reset();
+                break;
+        }
+    }
+
+
+    // bind events for touch devices
+    // except for windows phone 7.5, it doesnt support touch events..!
+    if('ontouchstart' in window) {
+        element.addEventListener("touchstart", handleEvents, false);
+        element.addEventListener("touchmove", handleEvents, false);
+        element.addEventListener("touchend", handleEvents, false);
+        element.addEventListener("touchcancel", handleEvents, false);
+    }
+    // for non-touch
+    else {
+
+        if(element.addEventListener){ // prevent old IE errors
+            element.addEventListener("mouseout", function(event) {
+                if(!isInsideHammer(element, event.relatedTarget)) {
+                    handleEvents(event);
+                }
+            }, false);
+            element.addEventListener("mouseup", handleEvents, false);
+            element.addEventListener("mousedown", handleEvents, false);
+            element.addEventListener("mousemove", handleEvents, false);
+
+            // events for older IE
+        }else if(document.attachEvent){
+            element.attachEvent("onmouseout", function(event) {
+                if(!isInsideHammer(element, event.relatedTarget)) {
+                    handleEvents(event);
+                }
+            }, false);
+            element.attachEvent("onmouseup", handleEvents);
+            element.attachEvent("onmousedown", handleEvents);
+            element.attachEvent("onmousemove", handleEvents);
+        }
+    }
+
+
+    /**
+     * find if element is (inside) given parent element
+     * @param   object  element
+     * @param   object  parent
+     * @return  bool    inside
+     */
+    function isInsideHammer(parent, child) {
+        // get related target for IE
+        if(!child && window.event && window.event.toElement){
+            child = window.event.toElement;
+        }
+
+        if(parent === child){
+            return true;
+        }
+
+        // loop over parentNodes of child until we find hammer element
+        if(child){
+            var node = child.parentNode;
+            while(node !== null){
+                if(node === parent){
+                    return true;
+                };
+                node = node.parentNode;
+            }
+        }
+        return false;
+    }
+
+
+    /**
+     * merge 2 objects into a new object
+     * @param   object  obj1
+     * @param   object  obj2
+     * @return  object  merged object
+     */
+    function mergeObject(obj1, obj2) {
+        var output = {};
+
+        if(!obj2) {
+            return obj1;
+        }
+
+        for (var prop in obj1) {
+            if (prop in obj2) {
+                output[prop] = obj2[prop];
+            } else {
+                output[prop] = obj1[prop];
+            }
+        }
+        return output;
+    }
+
+    function isFunction( obj ){
+        return Object.prototype.toString.call( obj ) == "[object Function]";
+    }
+}
