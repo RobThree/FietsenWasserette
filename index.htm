@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Fietsenwasserette</title>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="chrome=1">
+  <!--<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">-->
+  <!--<meta name="viewport" content="width=device-width, initial-scale=1.0">-->
+  <!--This one seems to work all the time, but really small on ipad-->
+  <!--<meta name="viewport" content="initial-scale=0.4">-->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <link rel="stylesheet" media="all" href="theme/css/default.css">
+  <link rel="stylesheet" media="only screen and (max-device-width: 480px)" href="theme/css/phone.css">
+  <base target="_blank"> <!-- This amazingness opens all links in a new tab. -->
+  <script data-main="js/slides" src="js/require-1.0.8.min.js"></script>
+</head>
+<body style="opacity: 0">
+
+<slides class="layout-widescreen">
+
+  <slide class="logoslide nobackground">
+    <article class="flexbox vcenter">
+      <img src="images/fw_logo.png">
+    </article>
+  </slide>
+
+  <slide class="title-slide segue nobackground">
+    <!-- The content of this hgroup is replaced programmatically through the slide_config.json. -->
+    <hgroup class="auto-fadein">
+      <h1 data-config-title><!-- populated from slide_config.json --></h1>
+      <h2 data-config-subtitle><!-- populated from slide_config.json --></h2>
+      <p data-config-presenter><!-- populated from slide_config.json --></p>
+    </hgroup>
+    <img src="images/jouwslimsteidee_logo.png" width="368" height="204" style="position:absolute;top:50px;right:50px;">
+  </slide>
+
+  <slide>
+    <hgroup>
+      <h2>Hoe kwam ik op het idee voor een fietsenwasserette?</h2>
+    </hgroup>
+    <article>
+      <p>Mijn fiets was vies en toen dacht ik: &quot;Waarom is er eigenlijk niet zoiets als een autowasseretter, maar dan voor fietsen?&quot; Dat was wel handig geweest...</p>
+      <img src="images/denken.jpg" >
+      <p>TODO: Foto van luca die omhoog kijkt en een tweede met een "a-ha erlebnis" (lampje verschijnt boven zijn hoofd -> photoshop)</p>
+    </article>
+  </slide>
+  
+  <slide>
+    <hgroup>
+      <h2>Waar komt de fietsenwasserette te staan?</h2>
+    </hgroup>
+    <article>
+      <p>De fietsenwasserette komt bijvoorbeeld bij statios en grote bewaakte fietsstallingen, maar ook in de buurt van sportcentra waar bijvoorbeeld mountainbike tochten worden georganiseerd. Dus, waar veel fietsers komen, moet de fietsenwasserette staan.</p>
+      <p>TODO: Foto van een tankstation (Josje? Of Google...) en een Luca met een handje vol kleingeld ofzo (jeej, dit ga ik verdienen / jeej, ik ga mijn fiets wassen)</p>
+    </article>
+  </slide>
+  
+  <slide class="fill nobackground" style="background:url(images/amsterdam-bicycles.jpg) no-repeat;">
+    <hgroup>
+      <h2>Waarom is de fietsenwasserette handig?</h2>
+    </hgroup>
+    <article>
+      <p>Er zijn 18 miljoen fietsen in Nederland, verdeeld over 13½ miljoen mensen. De meeste van die mensen hebben er een hekel aan om hun fiets te wassen. Er zijn dus veel mensen die misschien wel van zo'n fietsenwasserete gebruik zouden willen maken.</p>
+    </article>
+  </slide>
+
+  <slide class="fill nobackground" style="background:url(images/step1.png) no-repeat;">
+    <hgroup>
+      <h2 class="r">Hoe werkt de<br>fietsenwasserette?</h2>
+    </hgroup>
+    <article>
+      <p class="r">1: Je doet geld in een automaat.</p>
+    </article>
+    <img id="coin" width="150" height="148" src="images/coin.png" style="position:absolute;top:305px;left:750px;">
+    <div style="position:absolute;top:116px;left:138px;"><img src="images/door.png" width="315" height="584"></div>
+  </slide>
+
+  <slide class="fill nobackground" style="background:url(images/step1.png) no-repeat;">
+    <hgroup>
+      <h2 class="r">Hoe werkt de<br>fietsenwasserette?</h2>
+    </hgroup>
+    <article>
+      <p class="r">2: De deur gaat open.</p>
+      <p class="r">TODO: Gekke foto van Luca die achter<br>de deur staat gek te doen ofzo</p>
+    </article>
+    <div id="door_up" style="position:absolute;top:116px;left:138px;"><img src="images/door.png" width="315" height="584"></div>
+  </slide>
+  
+  <slide class="fill nobackground" style="background:url(images/step3.jpg) no-repeat;">
+    <hgroup>
+      <h2 class="r">Hoe werkt de<br>fietsenwasserette?</h2>
+    </hgroup>
+    <article>
+      <p class="r">3: Je zet je fiets in de standaard.</p>
+    </article>
+    <div id="bike3" style="position:absolute;top:90px;left:1100px;"><img src="images/bike_dirty_left.png" width="759" height="515"></div>
+    <img width="961" height="351" src="images/roverlay.png" style="position:absolute;top:302px;left:0;">
+  </slide>
+  
+  <slide class="fill nobackground" style="background:url(images/step4.jpg) no-repeat;">
+    <hgroup>
+      <h2 class="r">Hoe werkt de<br>fietsenwasserette?</h2>
+    </hgroup>
+    <article>
+      <p class="r">4: Je drukt op de groene knop.</p>
+      <p style="margin:300px 50px 0 600px;">(Als hij stuk is druk je op de rode knop om je geld terug te krijgen en er is ook nog een stopknop voor noodgevallen)</p>
+    </article>
+    <img id="glowbutton" width="72" height="70" src="images/glowbutton.jpg" style="position:absolute;top:273px;left:546px;display:none;">
+    <img id="hand" width="176" height="174" src="images/hand.png" style="position:absolute;top:700px;left:200px;">
+  </slide>
+  
+  <slide>
+    <hgroup>
+      <h2 class="r">Hoe werkt de<br>fietsenwasserette?</h2>
+    </hgroup>
+    <article>
+      <p>5: Er gaat een lamp branden om aan te geven dat je niet meer aan je fiets mag komen en het wasprogramma begint:</p>
+      <p>TODO: Foto van 'de lamp'</p>
+    </article>
+  </slide>
+  
+  <slide class="fill nobackground" style="background:url(images/step3.jpg) no-repeat;">
+    <hgroup>
+      <h2 class="r">Hoe werkt de<br>fietsenwasserette?</h2>
+    </hgroup>
+    <article>
+      <p class="r" style="margin-left:570px;">5a: Je fiets word besproeid met zeep. Dan moet je even wachten want dat moet even inwerken.</p>
+    </article>
+    <div style="position:absolute;top:90px;left:30px;"><img src="images/bike_dirty_left.png" width="759" height="515"></div>
+    <img id="soap1" width="1100" height="700" src="images/soap.png" style="position:absolute;top:0;left:0;display:none;">
+    <img width="961" height="351" src="images/roverlay.png" style="position:absolute;top:302px;left:0;">
+  </slide>
+  
+  <slide class="fill nobackground" style="background:url(images/step3.jpg) no-repeat;">
+    <hgroup>
+      <h2 class="r">Hoe werkt de<br>fietsenwasserette?</h2>
+    </hgroup>
+    <article>
+      <p class="r" style="margin-left:570px;">5b: Dan wordt de fiets met warm water schoon gemaakt door de sproeiers.</p>
+    </article>
+    <div style="position:absolute;top:90px;left:30px;"><img src="images/bike_dirty_left.png" width="759" height="515"></div>
+    <img id="soap2" width="1100" height="700" src="images/soap.png" style="position:absolute;top:0;left:0;">
+    <img id="water1" width="1100" height="700" src="images/water.png" style="position:absolute;top:0;left:0;display:none;">
+    <img width="961" height="351" src="images/roverlay.png" style="position:absolute;top:302px;left:0;">
+  </slide>
+  
+  <slide class="fill nobackground" style="background:url(images/step3.jpg) no-repeat;">
+    <hgroup>
+      <h2 class="r">Hoe werkt de<br>fietsenwasserette?</h2>
+    </hgroup>
+    <article>
+      <p class="r" style="margin-left:570px;">5c: Daarna wordt je fiets afgespoeld.</p>
+    </article>
+    <div style="position:absolute;top:90px;left:30px;"><img src="images/bike_clean_left.png" width="759" height="515"></div>
+    <img id="water2" width="1100" height="700" src="images/water.png" style="position:absolute;top:0;left:0;">
+    <img id="spray1" width="1100" height="700" src="images/spray.png" style="position:absolute;top:0;left:0;display:none;">
+    <img width="961" height="351" src="images/roverlay.png" style="position:absolute;top:302px;left:0;">
+  </slide>
+  
+  <slide>
+    <hgroup>
+      <h2 class="r">Hoe werkt de<br>fietsenwasserette?</h2>
+    </hgroup>
+    <article>
+      <p>5d: Dan wordt je fiets droog gemaakt met de ventilator.</p>
+    </article>
+  </slide>
+  
+  <slide>
+    <hgroup>
+      <h2 class="r">Hoe werkt de<br>fietsenwasserette?</h2>
+    </hgroup>
+    <article>
+      <p>6: De fiets is klaar. Het lampje gaat uit en je kunt je fiets weer pakken en weg gaan.</p>
+      <p>TODO: Foto van 'de lamp'</p>
+    </article>
+  </slide>
+  
+  <slide>
+    <hgroup>
+      <h2>De fietsenwasserette is goed voor de natuur<br>(het milieu):</h2>
+    </hgroup>
+    <article>
+      <p>Er zitten zonnepanelen op het dak, zodat je weinig tot geen stroom verbruikt.</p>
+      <p>TODO: Foto van de zonnepanelen</p>
+    </article>
+  </slide>
+
+  <slide>
+    <hgroup>
+      <h2>De fietsenwasserette is goed voor de natuur<br>(het milieu):</h2>
+    </hgroup>
+    <article>
+      <p>Het water wordt opnieuw gebruikt. Het gaat door het rooster in een watertank. Daarin zit een filter die het water schoon maakt en dan wordt het water opnieuw gebruikt.</p>
+      <p>TODO: Foto van een afvoerputje (gootsteen) ofzo waar wat water in weg loopt? (of iets googlen)</p>
+    </article>
+  </slide>
+    
+  <slide>
+    <hgroup>
+      <h2>De fietsenwasserette is goed voor de natuur<br>(het milieu):</h2>
+    </hgroup>
+    <article>
+      <p>Er wordt milieuvriendelijke zeep gebruikt.</p>
+      <p>TODO: Foto van 'de natuur' (Googlen... regenwoudje, bosje, whatever) + zeepfles o.i.d.</p>
+    </article>
+  </slide>
+
+  <slide>
+    <hgroup>
+      <h2>Bedankt voor uw aandacht!</h2>
+    </hgroup>
+    <article>
+      <h1>Stem op Luca!</h1>
+      <p>TODO: Luca met 2 thumbs up en een grote smile/grijns/gekke kop</p>
+    </article>
+  </slide>
+
+  <slide class="backdrop"></slide>
+
+  <a id="jsilogo" href="http://jouwslimsteidee.nl" class="clogo" style="display:block;position:absolute;bottom:50px;right:50px;border:0;display:none"><img src="images/jouwslimsteidee_logo.png" width="184" height="102"></a>
+  <a id="githublogo" href="https://github.com/RobThree/FietsenWasserette" class="clogo" style="display:block;position:absolute;bottom:50px;left:50px;border:0;display:none"><img src="images/octocat.png" width="102" height="102"></a>
+</slides>
+
+<!--[if IE]>
+  <script src="http://ajax.googleapis.com/ajax/libs/chrome-frame/1/CFInstall.min.js"></script>
+  <script>CFInstall.check({mode: 'overlay'});</script>
+<![endif]-->
+<script>
+    document.addEventListener('slideenter', function (event) {
+        console.log(event.slideNumber);
+        switch (event.slideNumber) {
+            case 1:
+                $('#prev-slide-area').hide();
+                break;
+            case 2:
+                $('#prev-slide-area').fadeIn();
+                if ($('#githublogo').is(':visible'))
+                    $('#githublogo').slideUp(1000);
+                if ($('#jsilogo').is(':visible'))
+                    $('#jsilogo').slideUp(1000);
+                break;
+            case 3:
+                if (!$('#githublogo').is(':visible'))
+                    $('#githublogo').slideDown(1000);
+                if (!$('#jsilogo').is(':visible'))
+                    $('#jsilogo').slideDown(1000);
+                break;
+            case 6:
+                $('#coin').clearQueue().finish().css({ width: '150px', height: '148px', top: '305px', left: '750px', position: 'absolute'}).show();
+                window.setTimeout(function() {
+                    $('#coin').animate({ width : 35, height: 35, left: '-=234px'}, 2000, function() {
+                            $('#coin').animate({ width : 0 }, 500, function() {
+                                $('#coin').hide();
+                            });
+                    });
+                }, 1000);
+                break;
+            case 7:
+                $('#door_up').clearQueue().finish().css({ position: 'absolute', top: '116px', left: '138px'}).show();
+                window.setTimeout(function() {
+                    $('#door_up').slideUp(2000, function() { 
+                        $('#door_up').delay(3000).slideDown(2000);
+                    });
+                }, 1000);
+                break;
+            case 8:
+                $('#bike3').clearQueue().finish().css({ position: 'absolute', top: '90px', left: '1100px'}).show();
+                window.setTimeout(function() {
+                    $('#bike3').animate({ left: '30px'}, 2000);
+                }, 1000);
+                break;
+            case 9:
+                $('#hand').clearQueue().finish().css({ position: 'absolute', top: '700px', left: '200px'}).show();
+                $('#glowbutton').hide();
+                window.setTimeout(function() {
+                    $('#hand').animate({ left: '490px', top: '310px'}, 2000, function() { 
+                        $('#glowbutton').show();
+                    });
+                }, 1000);
+                break;
+            case 11:
+                $('#soap1').clearQueue().finish().hide();
+                window.setTimeout(function() {
+                    $('#soap1').fadeIn(2000);
+                }, 1000);
+                break;
+            case 12:
+                $('#soap2').clearQueue().finish().show();
+                $('#water1').clearQueue().finish().hide();
+                window.setTimeout(function() {
+                    $('#water1').fadeIn(2000, function() { $('#soap2').fadeOut(500); });
+                }, 1000);
+                break;
+            case 13:
+                $('#water2').clearQueue().finish().show();
+                $('#spray1').clearQueue().finish().hide();
+                window.setTimeout(function() {
+                    $('#spray1').fadeIn(2000, function() { $('#water2').fadeOut(500); });
+                }, 1000);
+                break;
+            case 18:
+                $('#next-slide-area').fadeIn();
+                break;
+            case 19:
+                $('#next-slide-area').hide();
+        };
+    });
+</script>
+    <!--[if lt IE 9]>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script>window.jQuery || document.write('<script src="js/jquery-1.11.1.min.js"><\/script>')</script>
+    <![endif]-->
+    <!--[if gte IE 9]><!-->
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script>window.jQuery || document.write('<script src="js/jquery-2.1.1.min.js"><\/script>')</script>
+    <!--<![endif]-->
+
+</body>
+</html>

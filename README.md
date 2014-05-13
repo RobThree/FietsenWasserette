@@ -1,4 +1,4 @@
 FietsenWasserette
 =================
 
-jouwslimsteidee.nl contest entry for Luca Janssen
+[jouwslimsteidee.nl](http://jouwslimsteidee.nl) contest entry for [Luca Janssen](http://lucajanssen.nl)
