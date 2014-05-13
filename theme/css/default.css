@@ -23,8 +23,8 @@ time, mark, audio, video {
 /* line 20, ../../../../../../Library/Ruby/Gems/1.8/gems/compass-0.12.1/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
 body {
   line-height: 1;
-  background-image: url(../../images/604814_49146728.jpg);
-  background: url(../../images/604814_49146728.jpg) no-repeat center center fixed; 
+  background-image: url(../../images/back.jpg);
+  background: url(../../images/back.jpg) no-repeat center center fixed; 
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
