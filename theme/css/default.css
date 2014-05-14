@@ -1352,20 +1352,29 @@ article.smaller q:before, article.smaller q:after {
     opacity:1;
 }
 
-a.imgsource {
-    font-size: 12pt;
+.imgsource {
     position: absolute;
-    color: #fff;
-    border: none;
     bottom: 5px;
     right: 5px;
+}
+
+.imgsource a {
+    font-size: 12pt;
+    color: #fff;
+    border: none;
     text-shadow: 0 1px 2px rgba(0,0,0,.8);
     opacity: .4;
 }
 
-a.imgsource:hover {
+.imgsource a:hover {
     color: #fff !important;
     opacity: 1;
+}
+
+#addthis{
+    left:30px;
+    top:150px;
+    display:none;
 }
 
 @media print {
