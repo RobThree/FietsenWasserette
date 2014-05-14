@@ -1,1 +1,1 @@
-require(['order!../slide_config', 'order!modernizr', 'order!hammer', 'order!slide-deck']);
+require(['order!../slide_config', 'order!modernizr', 'order!hammer.min', 'order!slide-deck.min']);
