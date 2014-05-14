@@ -318,15 +318,15 @@ slides > slide.backdrop:after, slides > slide.backdrop:before {
   display: none;
 }
 
-slides > slide > hgroup + article {
+slides > slide hgroup + article {
   margin-top: 45px;
 }
 
-slides > slide > hgroup + article.flexbox.vcenter, slides > slide > hgroup + article.flexbox.vleft, slides > slide > hgroup + article.flexbox.vright {
+slides > slide hgroup + article.flexbox.vcenter, slides > slide > hgroup + article.flexbox.vleft, slides > slide > hgroup + article.flexbox.vright {
   height: 80%;
 }
 
-slides > slide > hgroup + article p {
+slides > slide hgroup + article p {
   margin-bottom: 1em;
 }
 
@@ -1375,6 +1375,18 @@ article.smaller q:before, article.smaller q:after {
     left:30px;
     top:150px;
     display:none;
+}
+
+.gradient {
+    margin: -40px -60px;
+    padding: 40px 60px;
+    background: -moz-linear-gradient(top,  rgba(0,0,0,0.50) 65%, rgba(0,0,0,0) 100%); /* FF3.6+ */
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(65%,rgba(0,0,0,0.50)), color-stop(100%,rgba(0,0,0,0))); /* Chrome,Safari4+ */
+    background: -webkit-linear-gradient(top,  rgba(0,0,0,0.50) 65%,rgba(0,0,0,0) 100%); /* Chrome10+,Safari5.1+ */
+    background: -o-linear-gradient(top,  rgba(0,0,0,0.50) 65%,rgba(0,0,0,0) 100%); /* Opera 11.10+ */
+    background: -ms-linear-gradient(top,  rgba(0,0,0,0.50) 65%,rgba(0,0,0,0) 100%); /* IE10+ */
+    background: linear-gradient(to bottom,  rgba(0,0,0,0.50) 65%,rgba(0,0,0,0) 100%); /* W3C */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#80000000', endColorstr='#00000000',GradientType=0 ); /* IE6-9 */
 }
 
 @media print {
