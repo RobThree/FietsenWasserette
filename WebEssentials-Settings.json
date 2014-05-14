@@ -87,7 +87,7 @@
     "AutoHyperlink": false,
     "AutoNewLines": false,
     "CompileOnBuild": false,
-    "CompileOnSave": true,
+    "CompileOnSave": false,
     "EncodeProblemUrlCharacters": false,
     "GenerateXHTML": true,
     "LinkEmails": false,
