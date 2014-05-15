@@ -186,8 +186,11 @@
             </hgroup>
             <article>
                 <p class="r" style="margin-left:570px;">6: De fiets is klaar. Het lampje gaat uit en je kunt je fiets weer pakken en weg gaan.</p>
+                <p class="r" style="margin:100px 50px 0 0;">Er staat een flesje olie om je fietsketting opnieuw te smeren als je wil.</p>
             </article>
+            <img id="oilcan" width="184" height="96" src="images/oilcan.png" style="position:absolute;top:490px;left:675px;display:none;">
             <img id="sign2" width="365" height="84" src="images/sign_on.png" style="position:absolute;top:190px;left:225px;">
+            <div class="imgsource"><a href="http://all-free-download.com/free-vector/vector-icon/car_icon_vector_152563.html">source</a></div>
         </slide>
 
         <slide class="fill nobackground" style="background:url(images/solarpanels.jpg) no-repeat;">
@@ -342,8 +345,10 @@
                     break;
                 case 15:
                     $('#sign2').show();
+                    $('#oilcan').hide();
                     window.setTimeout(function () {
                         $('#sign2').hide();
+                        $('#oilcan').fadeIn(2000);
                     }, 2000);
                     break;
                 case 16:
