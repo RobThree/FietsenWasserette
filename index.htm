@@ -115,9 +115,8 @@
                 <p class="r">4: Je drukt op de groene knop.</p>
                 <p style="margin:300px 50px 0 600px;">(voor noodgevallen is er de rode knop en er is buiten nog een knop om je geld terug te krijgen als hij het niet doet)</p>
             </article>
-            <div class="imgsource"><a href="http://www.freeimages.com/photo/1138681">source</a></div>
             <img id="glowbutton" width="72" height="70" src="images/glowbutton.jpg" style="position:absolute;top:273px;left:546px;display:none;">
-            <img id="hand" width="113" height="169" src="images/hand.png" style="position:absolute;top:700px;left:200px;">
+            <img id="hand" width="301" height="399" src="images/hand.png" style="position:absolute;top:700px;left:100px;">
         </slide>
 
         <slide class="fill nobackground" style="background:url(images/step5.jpg) no-repeat;">
@@ -300,10 +299,10 @@
                     }, 1000);
                     break;
                 case 9:
-                    $('#hand').clearQueue().finish().css({ position: 'absolute', top: '700px', left: '200px' }).show();
+                    $('#hand').clearQueue().finish().css({ position: 'absolute', top: '700px', left: '100px' }).show();
                     $('#glowbutton').hide();
                     window.setTimeout(function () {
-                        $('#hand').animate({ left: '510px', top: '310px' }, 2000, function () {
+                        $('#hand').animate({ left: '298px', top: '301px' }, 2000, function () {
                             $('#glowbutton').show();
                         });
                     }, 1000);
