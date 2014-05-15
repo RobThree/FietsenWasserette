@@ -203,6 +203,7 @@
                     <p>Er zitten zonnepanelen op het dak, zodat je weinig tot geen stroom verbruikt.</p>
                 </article>
             </div>
+            <img id="tan" width="866" height="276" src="images/tanning.png" style="position:absolute;top:300px;left:100px;display:none;">
             <div class="imgsource"><a href="http://www.freeimages.com/photo/1364625">source</a></div>
         </slide>
         <slide class="fill nobackground" style="background:url(images/drain.jpg) no-repeat;">
@@ -349,8 +350,14 @@
                         $('#sign2').hide();
                     }, 2000);
                     break;
+                case 16:
+                    $('#tan').clearQueue().finish().hide();
+                    window.setTimeout(function () {
+                        $('#tan').fadeIn(2000);
+                    }, 1000);
+                    break;
                 case 18:
-                    $('#row').clearQueue().finish().css({ left: '1100px' }).animate({ left: '-550px' }, 20000, 'linear');;
+                    $('#row').clearQueue().finish().css({ left: '1100px' }).animate({ left: '-550px' }, 20000, 'linear');
                     $('#addthis').clearQueue().finish().fadeOut();
                     $('#next-slide-area').fadeIn();
                     break;
