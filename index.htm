@@ -224,7 +224,8 @@
             <article>
                 <p>Er wordt milieuvriendelijke zeep gebruikt.</p>
             </article>
-            <div class="imgsource"><a href="http://www.freeimages.com/photo/1417255">source</a></div>
+            <img id="row" width="550" height="202" src="images/row.gif" style="position:absolute;top:400px;left:1100px;">
+            <div class="imgsource"><a href="http://www.freeimages.com/photo/1417255">source</a> <a href="http://www.freeimages.com/photo/835867">source</a></div>
         </slide>
         <slide class="fill">
             <hgroup>
@@ -349,6 +350,7 @@
                     }, 2000);
                     break;
                 case 18:
+                    $('#row').clearQueue().finish().css({ left: '1100px' }).animate({ left: '-550px' }, 20000, 'linear');;
                     $('#addthis').clearQueue().finish().fadeOut();
                     $('#next-slide-area').fadeIn();
                     break;
