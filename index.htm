@@ -70,7 +70,7 @@
             </div>
             <div class="imgsource"><a href="http://www.freeimages.com/photo/373355">source</a> <a href="http://www.fietsersbond.nl/de-feiten/fietsen-cijfers/fietsen-cijfers-2">source</a></div>
         </slide>
-        <slide class="fill nobackground" style="background:url(images/sidewall.png) no-repeat;">
+        <slide class="fill nobackground" style="background:url(images/sidewall.jpg) no-repeat;">
             <hgroup>
                 <h2 class="r">Hoe werkt de<br>fietsenwasserette?</h2>
             </hgroup>
@@ -81,7 +81,7 @@
             <img id="coin" width="150" height="148" src="images/coin.png" style="position:absolute;top:305px;left:750px;">
             <div style="position:absolute;top:116px;left:138px;"><img src="images/door.png" width="315" height="584"></div>
         </slide>
-        <slide class="fill nobackground" style="background:url(images/sidewall.png) no-repeat;">
+        <slide class="fill nobackground" style="background:url(images/sidewall.jpg) no-repeat;">
             <hgroup>
                 <h2 class="r">Hoe werkt de<br>fietsenwasserette?</h2>
             </hgroup>
@@ -124,6 +124,15 @@
                 <p class="r" style="margin-left:570px;">5: Er gaat een lamp branden om aan te geven dat je niet meer aan je fiets mag komen en het wasprogramma begint:</p>
             </article>
             <img id="sign1" width="365" height="84" src="images/sign_on.png" style="position:absolute;top:190px;left:225px;display:none;">
+        </slide>
+
+        <slide class="fill nobackground" style="background:url(images/curtain.jpg) no-repeat;">
+            <hgroup>
+                <h2 class="r">Hoe werkt de<br>fietsenwasserette?</h2>
+            </hgroup>
+            <article>
+                <p class="r" style="margin-left:570px;">Je moet achter het gordijn wachten omdat je anders nat kunt worden.</p>
+            </article>
         </slide>
 
         <slide class="fill nobackground" style="background:url(images/mount.jpg) no-repeat;">
@@ -313,14 +322,14 @@
                         $('#sign1').show();
                     }, 2000);
                     break;
-                case 11:
+                case 12:
                     $('#soap1').clearQueue().finish().hide();
                     $('#soapy').clearQueue().finish().hide();
                     window.setTimeout(function () {
                         $('#soap1').fadeIn(2000, function () { $('#soapy').fadeIn(2000); });
                     }, 1000);
                     break;
-                case 12:
+                case 13:
                     $('#soap2').clearQueue().finish().show();
                     $('#water1').clearQueue().finish().hide();
                     $('#wet').clearQueue().finish().css({ left: '-380px' });
@@ -328,7 +337,7 @@
                         $('#water1').fadeIn(2000, function () { $('#soap2').fadeOut(500, function () { $('#wet').animate({ left: '150px' }, 1000); }); });
                     }, 1000);
                     break;
-                case 13:
+                case 14:
                     $('#water2').clearQueue().finish().show();
                     $('#spray1').clearQueue().finish().hide();
                     $('#soaked').clearQueue().finish().css({ top: '700px' });
@@ -336,14 +345,14 @@
                         $('#spray1').fadeIn(2000, function () { $('#water2').fadeOut(500, function () { $('#soaked').animate({ top: '95px' }, 1000); }); });
                     }, 1000);
                     break;
-                case 14:
+                case 15:
                     $('#spray2').clearQueue().finish().show();
                     $('#dry').clearQueue().finish().css({ left: '-232px' });
                     window.setTimeout(function () {
                         $('#spray2').fadeOut(2000, function () { $('#dry').animate({ left: '450px' }, 1000); });
                     }, 1000);
                     break;
-                case 15:
+                case 16:
                     $('#sign2').show();
                     $('#oilcan').hide();
                     window.setTimeout(function () {
@@ -351,18 +360,18 @@
                         $('#oilcan').fadeIn(2000);
                     }, 2000);
                     break;
-                case 16:
+                case 17:
                     $('#tan').clearQueue().finish().hide();
                     window.setTimeout(function () {
                         $('#tan').fadeIn(2000);
                     }, 1000);
                     break;
-                case 18:
+                case 19:
                     $('#row').clearQueue().finish().css({ left: '1100px' }).animate({ left: '-550px' }, 20000, 'linear');
                     $('#addthis').clearQueue().finish().fadeOut();
                     $('#next-slide-area').fadeIn();
                     break;
-                case 19:
+                case 20:
                     $('#next-slide-area').hide();
                     $('#vote').hide();
                     $('#thumbsup').clearQueue().finish().css({ top: '700px' });
