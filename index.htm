@@ -131,8 +131,9 @@
                 <h2 class="r">Hoe werkt de<br>fietsenwasserette?</h2>
             </hgroup>
             <article>
-                <p class="r" style="margin-left:570px;">Je moet achter het gordijn wachten omdat je anders nat kunt worden.</p>
+                <p class="r" style="margin-left:680px;">Je moet achter het gordijn wachten omdat je anders nat kunt worden.</p>
             </article>
+            <img id="waiting" width="148" height="439" src="images/waiting.png" style="position:absolute;top:179px;left:660px;display:none">
         </slide>
 
         <slide class="fill nobackground" style="background:url(images/mount.jpg) no-repeat;">
@@ -320,6 +321,12 @@
                     $('#sign1').hide();
                     window.setTimeout(function () {
                         $('#sign1').show();
+                    }, 2000);
+                    break;
+                case 11:
+                    $('#waiting').hide();
+                    window.setTimeout(function () {
+                        $('#waiting').fadeIn(2000);
                     }, 2000);
                     break;
                 case 12:
