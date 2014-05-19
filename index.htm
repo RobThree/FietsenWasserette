@@ -247,7 +247,9 @@
             </article>
             <img id="thumbsup" width="1023" height="495" src="images/thumbsup.png" style="position:absolute;top:700px;left:38px;">
         </slide>
-        <slide class="backdrop"></slide>
+        <slide class="backdrop">
+            <img id="firstprize" width="228" height="199" src="images/1stprize.png" style="position:absolute;top:0;left:-0;display:none;">
+        </slide>
         <div id="splogos" style="text-align:center;position:absolute;bottom:10px;width:100%;">
             <a href="https://github.com/RobThree/FietsenWasserette" title="GitHub"><img src="images/octocat.png" width="102" height="102" style="position:absolute;left:50px;"></a>
             <a href="http://robiii.nl" title="RobIII"><img src="images/robiii.png" width="102" height="102" style="position:absolute;left:177px;"></a>
@@ -262,15 +264,18 @@
         document.addEventListener('slideenter', function (event) {
             switch (event.slideNumber) {
                 case 1:
+                    $('#firstprize').fadeOut();
                     $('#splogos').hide();
                     $('#prev-slide-area').hide();
                     break;
                 case 2:
+                    $('#firstprize').fadeIn();
                     $('#prev-slide-area').fadeIn();
                     if ($('#splogos').is(':visible'))
                         $('#splogos').slideUp(500);
                     break;
                 case 3:
+                    $('#firstprize').fadeOut();
                     if (!$('#splogos').is(':visible'))
                         $('#splogos').slideDown(500);
                     $('#think1').show();
