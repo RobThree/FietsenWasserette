@@ -18,7 +18,7 @@ var SLIDE_CONFIG = {
   presenters: [{
     name: 'Luca Janssen',
     company: 'Uitvinder',
-    www: 'http://lucajanssen.nl'
+    www: 'https://lucajanssen.nl'
   }, {
     name: 'Jan van Zomeren',
     company: 'Burgemeester Gemert-Bakel'
